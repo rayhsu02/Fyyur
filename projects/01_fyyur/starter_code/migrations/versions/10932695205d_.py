@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 21a6cadcda3e
+Revision ID: 10932695205d
 Revises: 
-Create Date: 2021-01-31 08:03:59.856539
+Create Date: 2021-02-01 16:37:37.447010
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '21a6cadcda3e'
+revision = '10932695205d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,7 +25,7 @@ def upgrade():
     sa.Column('state', sa.String(length=120), nullable=True),
     sa.Column('phone', sa.String(length=120), nullable=True),
     sa.Column('website', sa.String(length=120), nullable=True),
-    sa.Column('genres', sa.String(length=120), nullable=True),
+    sa.Column('genres', sa.ARRAY(sa.String(length=120)), nullable=True),
     sa.Column('image_link', sa.String(length=500), nullable=True),
     sa.Column('facebook_link', sa.String(length=120), nullable=True),
     sa.Column('seeking_venue', sa.Boolean(), nullable=True),
@@ -38,6 +38,8 @@ def upgrade():
     sa.Column('city', sa.String(length=120), nullable=True),
     sa.Column('state', sa.String(length=120), nullable=True),
     sa.Column('address', sa.String(length=120), nullable=True),
+    sa.Column('website', sa.String(length=120), nullable=True),
+    sa.Column('genres', sa.ARRAY(sa.String(length=120)), nullable=True),
     sa.Column('phone', sa.String(length=120), nullable=True),
     sa.Column('image_link', sa.String(length=500), nullable=True),
     sa.Column('facebook_link', sa.String(length=120), nullable=True),
@@ -48,10 +50,10 @@ def upgrade():
     op.create_table('shows',
     sa.Column('venue_id', sa.Integer(), nullable=False),
     sa.Column('artist_id', sa.Integer(), nullable=False),
-    sa.Column('start_time', sa.Date(), nullable=False),
+    sa.Column('start_time', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['artist_id'], ['artist.id'], ),
     sa.ForeignKeyConstraint(['venue_id'], ['venue.id'], ),
-    sa.PrimaryKeyConstraint('venue_id', 'artist_id')
+    sa.PrimaryKeyConstraint('venue_id', 'artist_id', 'start_time')
     )
     # ### end Alembic commands ###
 

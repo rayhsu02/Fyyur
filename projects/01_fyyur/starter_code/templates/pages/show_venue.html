@@ -48,7 +48,10 @@
 </div>
 <div class="row">
 	<div class="col-sm-3">
-		<input type="submit" value="Delete Venue" class="btn btn-primary btn-lg btn-block" onclick="delete_venue('{{venue.id}}')">
+		<input type="submit" value="Delete" class="btn btn-primary btn-lg btn-block" onclick="delete_venue('{{venue.id}}')">
+	</div>
+	<div class="col-sm-3">
+		<a  href="/venues/{{ venue.id }}/edit" class="btn btn-primary btn-lg btn-block">Edit</a>
 	</div>
 </div>
 <section>
@@ -60,7 +63,7 @@
 			<div class="tile tile-show">
 				<img src="{{ show.artist_image_link }}" alt="Show Artist Image" />
 				<h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
-				<h6>{{ show.start_time|datetime('full') }}</h6>
+				<h6>{{ show.start_time.strftime("%m/%d/%Y, %H:%M:%S")|datetime('full') }}</h6>
 			</div>
 		</div>
 		{% endfor %}
@@ -74,7 +77,7 @@
 			<div class="tile tile-show">
 				<img src="{{ show.artist_image_link }}" alt="Show Artist Image" />
 				<h5><a href="/artists/{{ show.artist_id }}">{{ show.artist_name }}</a></h5>
-				<h6>{{ show.start_time|datetime('full') }}</h6>
+				<h6>{{ show.start_time.strftime("%m/%d/%Y, %H:%M:%S")|datetime('full') }}</h6>
 			</div>
 		</div>
 		{% endfor %}
