@@ -115,14 +115,33 @@ def create_app(test_config=None):
     answer = body.get('answer', None)
     difficulty = body.get('difficulty', None)
     category = body.get('category', None)
+    search = body.get('searchTerm', None)
+    print(search)
 
-    new_question = Question(question=question, answer=answer, difficulty=difficulty, category=category)
-    Question.insert(new_question)
-
-    return jsonify({
+    if search:
+      
+      questions = Question.query.filter(Question.question.ilike('%{}%'.format(search))).all()
+      current_questions = paginate_items(request, questions)
+      return jsonify({
         'success': True,
-    })
-    
+        'questions':current_questions
+      })
+    elif search == '':
+      
+      if search == '':
+        print('empty')
+        return jsonify({
+        'success': True,
+        'questions':[]
+      })
+    elif question and answer and difficulty and category:
+      print('create')
+      new_question = Question(question=question, answer=answer, difficulty=difficulty, category=category)
+      Question.insert(new_question)
+
+      return jsonify({
+          'success': True,
+      })
 
   '''
   @TODO: 
@@ -134,6 +153,10 @@ def create_app(test_config=None):
   only question that include that string within their question. 
   Try using the word "title" to start. 
   '''
+  
+
+    
+
 
   '''
   @TODO: 
