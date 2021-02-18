@@ -25,6 +25,7 @@ class QuizView extends Component {
       url: `/categories`, //TODO: update request URL
       type: "GET",
       success: (result) => {
+        console.log(result.categories )
         this.setState({ categories: result.categories })
         return;
       },
@@ -112,7 +113,7 @@ class QuizView extends Component {
                       value={id}
                       className="play-category"
                       onClick={() => this.selectCategory({type:this.state.categories[id], id})}>
-                      {this.state.categories[id]}
+                      {this.state.categories[id].type}
                     </div>
                   )
                 })}
