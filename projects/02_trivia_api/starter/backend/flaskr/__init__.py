@@ -174,10 +174,7 @@ def create_app(test_config=None):
   def get_questions_category(id):
     
     questions = Question.query.filter(Question.category == id).all()
-    current_questions = paginate_items(request, questions)
-    
-
-    
+    current_questions = paginate_items(request, questions)  
     return jsonify({
       'success':True,
       'questions': current_questions,

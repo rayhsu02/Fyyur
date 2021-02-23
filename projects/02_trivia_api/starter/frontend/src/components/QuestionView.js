@@ -65,7 +65,6 @@ class QuestionView extends Component {
   }
 
   getByCategory= (id) => {
-    
     $.ajax({
       url: `/categories/${id}/questions?page=${this.state.page}`, //TODO: update request URL
       type: "GET",
@@ -139,7 +138,6 @@ class QuestionView extends Component {
           <h2 onClick={() => {this.getQuestions()}}>Categories</h2>
           <ul>
             {Object.keys(this.state.categories).map((id, ) => (
-              
               <li key={id} onClick={() => {this.onSelectCategory(id)}}>
               {this.state.categories[id]}
               <img className="category" src={`${this.state.categories[id]}.svg`}/>
