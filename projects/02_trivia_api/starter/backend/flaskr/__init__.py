@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, abort, jsonify
+from flask import Flask, json, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
@@ -108,8 +108,9 @@ def create_app(test_config=None):
   def delete_question(id):
     try:
       question = Question.query.filter(Question.id == id).one_or_none()
+     
       if question is None:
-        abort(404)
+        abort(404, description="Resource not found")
 
       question.delete()
 
@@ -245,6 +246,38 @@ def create_app(test_config=None):
   Create error handlers for all expected errors 
   including 404 and 422. 
   '''
+  @app.errorhandler(400)
+  def handle_400(error):
+    return jsonify({
+      'success': False,
+      'error':400,
+      'message':'Error in patching'
+    }), 400
+  
+  @app.errorhandler(404)
+  def handle_notfound(error):
+    return jsonify({
+      'success':False,
+      'error':404,
+        'message':'Error not found'
+    }), 404
+
+  @app.errorhandler(422)
+  def handle_notfound(error):
+    return jsonify({
+      'success':False,
+      'error':422,
+        'message':'Error not found'
+    }), 422
+    
+  @app.errorhandler(500)
+  def handle_500(error):
+    return jsonify({
+        'success':False,
+        'error':500,
+        'message':'Server error'
+    }),500
+
   
   return app
 
