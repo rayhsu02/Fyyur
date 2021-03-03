@@ -1,6 +1,7 @@
 import os
 import unittest
-import json
+# import json
+from flask import  json
 from flask_sqlalchemy import SQLAlchemy
 
 from flaskr import create_app
@@ -15,8 +16,15 @@ class TriviaTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "trivia_test"
-        self.database_path = "postgres://{}/{}".format('localhost:5432', self.database_name)
+        self.database_path = "postgresql://{}/{}".format('localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
+
+        self.new_question = {
+            'question': 'new question',
+            'answer': 'Neil Gaiman',
+            'difficulty': 1,
+            'category': 1,
+        }
 
         # binds the app to the current context
         with self.app.app_context():
@@ -78,6 +86,54 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
+
+    def test_create_new_question(self):
+        res = self.client().post('/questions', json=self.new_question)
+        data = json.loads(res.data)
+        
+        self.assertEqual(data['success'], True)
+
+    def test_create_new_question_faild(self):
+        res = self.client().post('/questions', json="")
+        data = json.loads(res.data)
+        
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Unprocessable')
+    
+    def test_search_question_with_result(self):
+        res = self.client().post('/questions', json={'searchTerm': 'lifetime'})
+        data = json.loads(res.data)
+        
+        self.assertEqual(data['success'], True)
+        self.assertEqual(len(data['questions']), 1)
+
+    def test_search_question_with_no_result(self):
+        res = self.client().post('/questions', json={'searchTerm': 'test'})
+        data = json.loads(res.data)
+
+        self.assertEqual(data['success'], True)
+        self.assertEqual(len(data['questions']), 0)
+
+    def test_blank_search_term_question_with_no_result(self):
+        res = self.client().post('/questions', json={'searchTerm': ''})
+        data = json.loads(res.data)
+
+        self.assertEqual(data['success'], True)
+        self.assertEqual(len(data['questions']), 0)
+    
+    def test_questions_by_category(self):
+        res = self.client().get('/categories/1/questions')
+        data = json.loads(res.data)
+        
+        self.assertEquals(data['success'], True)
+        self.assertGreater(data['total_questions'], 0)
+
+    def test_play_quiz(self):
+        res = self.client().post('/quizzes', json={'quiz_category': {'type': {'id': 1, 'type': 'Science'}, 'id': '0'}, 'previous_questions': []})
+        data = json.loads(res.data)
+        print(data)
+        self.assertEqual(data['success'], True)
+        self.assertGreater(len(data['question']), 0)
         
 
 
