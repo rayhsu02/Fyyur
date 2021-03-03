@@ -14,8 +14,10 @@ def paginate_items(request, selection):
   page = request.args.get('page', 1, type=int)
   start = (page - 1) * QUESTIONS_PER_PAGE
   end = start + QUESTIONS_PER_PAGE
+
   questions = [ question.format() for question in selection]
   current_questions = questions[start:end]
+
   return current_questions
 
 def create_app(test_config=None):
@@ -142,9 +144,9 @@ def create_app(test_config=None):
       search = body.get('searchTerm', None)
 
       if search:
-        
         questions = Question.query.filter(Question.question.ilike('%{}%'.format(search))).all()
         current_questions = paginate_items(request, questions)
+        
         return jsonify({
           'success': True,
           'questions':current_questions
@@ -221,17 +223,22 @@ def create_app(test_config=None):
   @app.route('/quizzes', methods=['POST'])
   def playQuiz():
     try:
+      
       body = request.get_json()
+      questions = []
       quiz_category = body.get('quiz_category', None)
-      quiz_category_id = quiz_category.get('type', None).get('id', 1)
+      id = quiz_category.get('id', None)
       previous_questions = body.get('previous_questions', None)
       
+      if id == -1:
+        questions = Question.query.all()
+      else:
+        quiz_category_id = quiz_category.get('type', None).get('id', 1)
+        questions = Question.query.filter(Question.category == quiz_category_id).all()
 
-      questions = Question.query.filter(Question.category == quiz_category_id).all()
       total_questions = len(questions)
       randomId = random.randint(0,total_questions-1)
       quize = questions[randomId]
-      
 
       return jsonify({
         'success': True,
@@ -267,7 +274,7 @@ def create_app(test_config=None):
     return jsonify({
       'success':False,
       'error':422,
-        'message':'Error not found'
+        'message':'Unprocessable'
     }), 422
     
   @app.errorhandler(500)
