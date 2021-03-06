@@ -80,12 +80,101 @@ GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
 - Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
+{
+'success': True,
+'categories': {'1' : "Science",
+    '2' : "Art",
+    '3' : "Geography",
+    '4' : "History",
+    '5' : "Entertainment",
+    '6' : "Sports"},
+'total': cirrent_size
+}
+
+
+GET '/questions'
+- Fetches a dictionary of questions in which the keys are the ids and the value is the corresponding string of the category
+- Request Arguments: None
+- Returns: return a list of questions, 
+  # number of total questions, current category, categories. 
+{
+        'success': True,
+        'questions': current_questions,
+        'total_questions': 20,
+        "categories" : categories,
+        'current_category': ""
+}
+
+DELETE '/questions/<int:id>'
+- DELETE question using a question ID. 
+- Request Arguments: id: integer
+- Returns: return true if delete successfully
+{
+    'success':True
+}
+
+POST '/questions'
+- POST a new question, 
+  which will require the question and answer text, 
+  category, and difficulty score.
+- Request Arguments: json data
+{
+    question: 'text',
+    answer: 'answer',
+    difficulty: 1,
+    category: 2
+}
+- Returns: return json object , 
+  # success. 
+{
+    'success': True,
+}
+
+POST '/questions'
+- POST endpoint to get questions based on a search term. 
+  It should return any questions for whom the search term 
+  is a substring of the question. 
+- Request Arguments: json data includes search term
+{
+    searchTerm: 'text',
+}
+
+- Returns: return json object , 
+  # success. a list of questions for the search term.
+{
+    'success': True,
+    'questions':[questions]
+}
+
+GET '/categories/<int:id>/questions'
+- GET endpoint to get questions based on category. 
+- Request Arguments: category id: integer
+- Returns: return a list of questions, 
+  # number of total questions, current category, questions, success. 
+{
+    'success': True,
+    'questions': current_questions,
+    'total_questions': 20,
+    'current_category': ""
+}
+
+POST '/quizzes'
+- POST endpoint to get questions to play the quiz. 
+  This endpoint should take category and previous question parameters 
+  and return a random questions within the given category, 
+  if provided, and that is not one of the previous questions. 
+- Request Arguments: json data
+{
+    previous_questions: previousQuestions,
+    quiz_category: 1
+}
+- Returns: return json object , 
+  # success, previousQuestions array, question
+{
+    'success': True,
+    'previousQuestions' : previous_questions,
+    'question': quize.format()
+}
 
 ```
 

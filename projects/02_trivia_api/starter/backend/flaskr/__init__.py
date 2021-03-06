@@ -43,7 +43,7 @@ def create_app(test_config=None):
 
   @app.route("/")
   def hello():
-    return "hello"
+    return "trivia api"
   '''
   @TODO: 
   Create an endpoint to handle GET requests 
