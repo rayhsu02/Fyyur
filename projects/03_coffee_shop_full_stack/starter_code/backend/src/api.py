@@ -204,4 +204,11 @@ def handle_500(error):
 @TODO implement error handler for AuthError
     error handler should conform to general task above 
 '''
+@app.errorhandler(AuthError)
+def handle_auth_error(exception):
+    print(exception)
+    response = jsonify(exception.error)
+    response.status_code = exception.status_code
+
+    return response, exception.status_code
 
